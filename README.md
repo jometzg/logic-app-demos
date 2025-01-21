@@ -10,7 +10,7 @@ This is a simple triggered workflow that listens to an SFTP folder and when file
 ![Mirror Files](images/mirror-files.png "Mirror Files")
 
 ## Process Files
-This is another SFTP triggered workflow that listens to an SFTP site and when triggered, look to see if the file is a zip. If the file is a zip, it uses an Azure Function to descryypt and extract the files to the destination (using a key held in key vault). If the file is not a zip, it just copies it. In either path, it finally deletes the source file.
+This is another SFTP triggered workflow that listens to an SFTP site and when triggered, look to see if the file is a zip. If the file is a zip, it uses an Azure Function to decrypt and extract the files to the destination (using a key held in key vault). If the file is not a zip, it just copies it. In either path, it finally deletes the source file.
 ![Process Files](images/process-files.png "Process Files")
 
 
