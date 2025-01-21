@@ -1,0 +1,87 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Upload_file_content": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "filePath": "@triggerBody()?['fileMetadata']?['pathRelativeToRootDirectory']",
+                        "overWriteFileIfExists": true,
+                        "content": "@triggerBody()?['content']"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "Sftp-1",
+                        "operationId": "uploadFileContent",
+                        "serviceProviderId": "/serviceProviders/Sftp"
+                    }
+                },
+                "runAfter": {}
+            },
+            "Rename_file": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "filePath": "@body('Upload_file_content')?['pathRelativeToRootDirectory']",
+                        "newFileName": "@concat('target', triggerBody()?['fileMetadata']?['path'],'-', formatDateTime(utcNow(), 'yyyyMMdd'))",
+                        "fetchMetadata": false
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "Sftp-1",
+                        "operationId": "renameFile",
+                        "serviceProviderId": "/serviceProviders/Sftp"
+                    }
+                },
+                "runAfter": {
+                    "Upload_file_content": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Delete_source_file": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "filePath": "@triggerBody()?['fileMetadata']?['path']",
+                        "skipDelete": false
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "Sftp-4",
+                        "operationId": "deleteFile",
+                        "serviceProviderId": "/serviceProviders/Sftp"
+                    }
+                },
+                "runAfter": {
+                    "Rename_file": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_files_are_added_or_updated_to_thirdsftp": {
+                "type": "ServiceProvider",
+                "kind": "Polling",
+                "inputs": {
+                    "parameters": {
+                        "folderPath": "/",
+                        "includeFileContent": true
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "Sftp-4",
+                        "operationId": "whenFilesAreAddedOrModified",
+                        "serviceProviderId": "/serviceProviders/Sftp"
+                    }
+                },
+                "recurrence": {
+                    "interval": 1,
+                    "frequency": "Minute"
+                },
+                "splitOn": "@triggerOutputs()?['body']"
+            }
+        }
+    },
+    "kind": "Stateful"
+}
