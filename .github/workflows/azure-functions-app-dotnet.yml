@@ -46,7 +46,7 @@ jobs:
         mkdir output
         cp 'logicapps/host.json' 'output/'
         cp 'logicapps/connections.json' 'output/'
-        cp -r 'logicapps/publisher' 'output/'
+        cp -r 'demos' 'output/'
 
     - name: Easy Zip Files
       uses: papeloto/action-zip@v1
