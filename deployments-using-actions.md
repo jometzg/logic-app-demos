@@ -184,11 +184,14 @@ This can be used for Logic Apps Standard workflow deployments. In order to use t
 ![alt text](./images/file-structure-3.png "File structure")
 
 These reference connections:
+
 ![alt text](./images/logic-connections.png "Connections")
 
-which reference an App Setting
+which references an App Setting
+
 ![alt text](./images/logic-blob-connection-app-setting.png "App Setting")
 
+### Steps in GitHub Action
 Firstly use an action to copy the files to a known place *output* for the zip deploy step:
 ```
  - name: Create project folder
