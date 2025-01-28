@@ -47,8 +47,8 @@ jobs:
     - name: Create project folder
       run: |
         mkdir output
-        cp 'workflows/host.json' 'output/'
-        cp 'workflows/connections.json' 'output/'
+        cp 'logicapps/host.json' 'output/'
+        cp 'logicapps/connections.json' 'output/'
         cp -r 'workflows/copy-blob' 'output/'
         cp -r 'workflows/move-blobs' 'output/'
 
