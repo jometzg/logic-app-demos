@@ -46,7 +46,10 @@ jobs:
     - name: Create project folder
       run: |
         mkdir output
-        cp -r 'workflows' 'output/' # copy all the files, host, connections and all workflows
+        cp 'workflows/host.json' 'output/'
+        cp 'workflows/connections.json' 'output/'
+        cp -r 'workflows/copy-blob' 'output/'
+        cp -r 'workflows/move-blobs' 'output/'
 
     - name: Easy Zip Files
       uses: papeloto/action-zip@v1
