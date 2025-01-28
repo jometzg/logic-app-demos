@@ -216,3 +216,15 @@ Then the action to zip the above structure needs to be performed:
 Once this has been run, the Logic App should have these workflows present.
 
 ![alt text](./images/deployed-workflows.png "Workflows")
+
+# Summary and Take-Aways
+1. Logic App Standard allows easier separation of infrastructure from workflow deployments
+2. Uses the Functions zip deploy
+3. The zip that needs to be deployed needs to have a specific structure and must include a host.json and connections.json in the root, together with a folder per workflow (the folder name becomes the workflow name) and each folder must have a worflow.json file.
+4. Use an action to copy the right files to an output folder
+5. from there zip that up
+6. the connections.json contains the names and settings for connections needed in ALL of the workflows
+7. the connections in connections.json reference an App Setting that actually has the connection string. This settings needs to be created separately or earlier on in the flow if it does not exist
+8. For managed identity connections there are some slight differences
+
+
