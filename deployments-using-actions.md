@@ -183,6 +183,12 @@ This can be used for Logic Apps Standard workflow deployments. In order to use t
 
 ![alt text](./images/file-structure-3.png "File structure")
 
+These reference connections:
+![alt text](./images/logic-connections.png "App Setting")
+
+which reference an App Setting
+![alt text](./images/logic-blob-connection-app-setting.png "App Setting")
+
 Firstly use an action to copy the files to a known place *output* for the zip deploy step:
 ```
 - name: Create project folder
@@ -220,7 +226,7 @@ Once this has been run, the Logic App should have these workflows present.
 # Summary and Take-Aways
 1. Logic App Standard allows easier separation of infrastructure from workflow deployments
 2. Uses the Functions zip deploy
-3. The zip that needs to be deployed needs to have a specific structure and must include a host.json and connections.json in the root, together with a folder per workflow (the folder name becomes the workflow name) and each folder must have a worflow.json file.
+3. The zip that needs to be deployed needs to have a specific structure and must include a host.json and connections.json in the root, together with a folder per workflow (the folder name becomes the workflow name) and each folder must have a workflow.json file.
 4. Use an action to copy the right files to an output folder
 5. from there zip that up
 6. the connections.json contains the names and settings for connections needed in ALL of the workflows
