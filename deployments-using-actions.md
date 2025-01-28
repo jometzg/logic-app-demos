@@ -133,7 +133,17 @@ workflow-name-folder
 second-workflow-name-folder
   workflow.json
 
-An action to then zip the above structure needs to be performed:
+Firstly use an action to copy the files to a known place *output* for the zip deploy step:
+```
+- name: Create project folder
+      run: |
+        mkdir output
+        cp 'logicapps/host.json' 'output/'
+        cp 'logicapps/connections.json' 'output/'
+        cp -r 'logicapps/publisher' 'output/'
+```
+
+Then the action to zip the above structure needs to be performed:
 
 ```
 - name: Easy Zip Files
