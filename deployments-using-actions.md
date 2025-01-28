@@ -126,21 +126,15 @@ There is already a GitHub Action [zip deploy](https://learn.microsoft.com/en-us/
 
 This can be used for Logic Apps Standard workflow deployments. In order to use this, a zip file needs to be created that conforms to a standard structure:
 
-host.json
-connections.json
-workflow-name-folder
-  workflow.json
-second-workflow-name-folder
-  workflow.json
+![alt text](./images/file-structure.png "File structure")
 
 Firstly use an action to copy the files to a known place *output* for the zip deploy step:
 ```
 - name: Create project folder
+   - name: Create project folder
       run: |
         mkdir output
-        cp 'logicapps/host.json' 'output/'
-        cp 'logicapps/connections.json' 'output/'
-        cp -r 'logicapps/publisher' 'output/'
+        cp -r 'workflows' 'output/' # copy all the files, host, connections and all workflows
 ```
 
 Then the action to zip the above structure needs to be performed:
