@@ -184,7 +184,7 @@ This can be used for Logic Apps Standard workflow deployments. In order to use t
 ![alt text](./images/file-structure-3.png "File structure")
 
 These reference connections:
-![alt text](./images/logic-connections.png "App Setting")
+![alt text](./images/logic-connections.png "Connections")
 
 which reference an App Setting
 ![alt text](./images/logic-blob-connection-app-setting.png "App Setting")
