@@ -150,11 +150,14 @@ Then the action to zip the above structure needs to be performed:
  this zip file is then used to deploy to the logic app
 
  ```
- - name: 'Run Azure Functions Action'
+    - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
       with:
-        app-name: ${{steps.output_step.outputs.LogicAppName}}
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: '${{ github.run_id }}.zip'
 ```
 
+Once this has been run, the Logic App should have these workflows present.
+
+![alt text](./images/deployed-workflows.png "Workflows")
