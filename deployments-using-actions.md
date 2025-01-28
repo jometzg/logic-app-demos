@@ -126,7 +126,7 @@ There is already a GitHub Action [zip deploy](https://learn.microsoft.com/en-us/
 
 This can be used for Logic Apps Standard workflow deployments. In order to use this, a zip file needs to be created that conforms to a standard structure:
 
-![alt text](./images/file-structure.png "File structure")
+![alt text](./images/file-structure-2.png "File structure")
 
 Firstly use an action to copy the files to a known place *output* for the zip deploy step:
 ```
