@@ -17,7 +17,7 @@ In general, this is going to be:
 1. Infrastructure
 2. Workflows
 
-## Infrastructure Deployment
+# Infrastructure Deployment
 There are many routes to this:
 1. CLI
 2. Developer CLI (azd)
@@ -29,7 +29,7 @@ It is best to align this with the overall approach that is other use on adjacent
 
 This is how a Logic Apps Standard may be deployed using [Bicep](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview?tabs=bicep)
 
-There are broadly-speaking 3 main components:
+There are broadly-speaking 4 main components:
 1. the Logic App itself
 2. the server farm on which the Logic App is deployed (this may be shared)
 3. A storage account for state management
@@ -104,3 +104,53 @@ Application Insights
   }
 }
 ```
+
+# Workflow Deployment
+As the Logic Apps run under the Azure Functions runtime, the Azure Functions deployment mechanisms may be used. These mechanisms are traditionally used for code deployments, but can also deploy the workflow definitions.
+
+## What needs to be deployed
+There are three components to a Logic App definition:
+
+1. hosts.json
+2. connections.json
+3. workflow.json
+
+The hosts file is pretty standard and just defines the runtime and versions that the logic apps run under.
+
+The connections.json contains references to the connections to other services that any of the workflows may need. These work alongside some App Settings which will actually define connection strings to these remote services. For a deployed workflow to work, all of the connections used need to be defined and these connections span all of the workflows for that Logic App.
+
+Each workflow itself needs to be defined in its own *workflow.json* file. Therefore if there are multiple workflows to be deployed, then each of these needs to be in its own folder and each named workflow.json.
+
+## How to deploy
+There is already a GitHub Action [zip deploy](https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-github-actions?tabs=linux%2Cdotnet&pivots=method-template) for Azure Functions.
+
+This can be used for Logic Apps Standard workflow deployments. In order to use this, a zip file needs to be created that conforms to a standard structure:
+
+host.json
+connections.json
+workflow-name-folder
+  workflow.json
+second-workflow-name-folder
+  workflow.json
+
+An action to then zip the above structure needs to be performed:
+
+```
+- name: Easy Zip Files
+      uses: papeloto/action-zip@v1
+      with:
+        dest: '${{ github.run_id }}.zip'
+        files: output/
+```
+
+ this zip file is then used to deploy to the logic app
+
+ ```
+ - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{steps.output_step.outputs.LogicAppName}}
+        package: '${{ github.run_id }}.zip'
+```
+
