@@ -191,11 +191,13 @@ which reference an App Setting
 
 Firstly use an action to copy the files to a known place *output* for the zip deploy step:
 ```
-- name: Create project folder
-   - name: Create project folder
+ - name: Create project folder
       run: |
         mkdir output
-        cp -r 'workflows' 'output/' # copy all the files, host, connections and all workflows
+        cp 'logicapps/host.json' 'output/'
+        cp 'logicapps/connections.json' 'output/'
+        cp -r 'workflows/copy-blob' 'output/'
+        cp -r 'workflows/move-blobs' 'output/'
 ```
 
 Then the action to zip the above structure needs to be performed:
