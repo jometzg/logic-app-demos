@@ -228,6 +228,16 @@ which references an App Setting
 
 ![alt text](./images/logic-blob-connection-app-setting.png "App Setting")
 
+### Debugging Deployments
+There are quite a few ways in which this can go wrong. Here are some hints:
+
+1. check the Action run and that all steps are executing and the run is *green*.
+2. Check the logic app to see if the workflows and connections are present
+3. Check that there is an App Setting per connection - as it is this that holds the connection information
+4. Check Kudu to see if you see the file structure you are expecting
+
+![alt text](./images/kudu-debugging.png "Kudu")
+
 # Summary and Take-Aways
 1. Logic App Standard allows easier separation of infrastructure from workflow deployments
 2. Uses the Functions zip deploy
