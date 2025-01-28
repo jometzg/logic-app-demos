@@ -1,0 +1,42 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "actions": {
+      "Copy_blob_from_source_location_to_destination": {
+        "type": "ServiceProvider",
+        "inputs": {
+          "parameters": {
+            "sourceContainerName": "source",
+            "sourceBlobName": "@triggerBody()?['name']",
+            "destinationContainerName": "destination",
+            "destinationBlobName": "@triggerBody()?['name']"
+          },
+          "serviceProviderConfiguration": {
+            "connectionName": "AzureBlob",
+            "operationId": "copyBlob",
+            "serviceProviderId": "/serviceProviders/AzureBlob"
+          }
+        },
+        "runAfter": {}
+      }
+    },
+    "contentVersion": "1.0.0.0",
+    "outputs": {},
+    "triggers": {
+      "When_a_blob_is_added_or_updated": {
+        "type": "ServiceProvider",
+        "inputs": {
+          "parameters": {
+            "path": "source"
+          },
+          "serviceProviderConfiguration": {
+            "connectionName": "AzureBlob",
+            "operationId": "whenABlobIsAddedOrModified",
+            "serviceProviderId": "/serviceProviders/AzureBlob"
+          }
+        }
+      }
+    }
+  },
+  "kind": "Stateful"
+}
