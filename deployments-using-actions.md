@@ -183,14 +183,6 @@ This can be used for Logic Apps Standard workflow deployments. In order to use t
 
 ![alt text](./images/file-structure-3.png "File structure")
 
-These reference connections:
-
-![alt text](./images/logic-connections.png "Connections")
-
-which references an App Setting
-
-![alt text](./images/logic-blob-connection-app-setting.png "App Setting")
-
 ### Steps in GitHub Action
 Firstly use an action to copy the files to a known place *output* for the zip deploy step:
 ```
@@ -224,9 +216,17 @@ Then the action to zip the above structure needs to be performed:
         package: '${{ github.run_id }}.zip'
 ```
 
+### Deployed Logic App Workflows
 Once this has been run, the Logic App should have these workflows present.
 
 ![alt text](./images/deployed-workflows.png "Workflows")
+These reference connections:
+
+![alt text](./images/logic-connections.png "Connections")
+
+which references an App Setting
+
+![alt text](./images/logic-blob-connection-app-setting.png "App Setting")
 
 # Summary and Take-Aways
 1. Logic App Standard allows easier separation of infrastructure from workflow deployments
