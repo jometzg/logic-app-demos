@@ -1,28 +1,15 @@
 {
-  "managedApiConnections": {},
   "serviceProviderConnections": {
-    "serviceBus": {
+    "AzureBlob": {
       "parameterValues": {
-        "connectionString": "@appsetting('serviceBus_connectionString')"
+        "connectionString": "@appsetting('AzureBlob_connectionString')"
       },
       "parameterSetName": "connectionString",
       "serviceProvider": {
-        "id": "/serviceProviders/serviceBus"
-      },
-      "displayName": "serviceBusConnection"
-    },
-    "AzureBlob": {
-      "parameterValues": {
-        "blobStorageEndpoint": "@appsetting('AzureBlob_blobStorageEndpoint')",
-        "authProvider": {
-          "Type": "ManagedServiceIdentity"
-        }
-      },
-      "parameterSetName": "ManagedServiceIdentity",
-      "serviceProvider": {
         "id": "/serviceProviders/AzureBlob"
       },
-      "displayName": "clientStorageConnection"
+      "displayName": "source-container"
     }
-  }
+  },
+  "managedApiConnections": {}
 }
