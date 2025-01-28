@@ -1,0 +1,97 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "List_all_the_blobs_using_path": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "containerName": "scheduledsource"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob-1",
+                        "operationId": "listBlobs",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {}
+            },
+            "For_each": {
+                "type": "Foreach",
+                "foreach": "@body('List_all_the_blobs_using_path')?['blobs']",
+                "actions": {
+                    "Copy_blob_from_source_location_to_destination": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "sourceContainerName": "scheduledsource",
+                                "sourceBlobName": "@items('For_each')?['Name']",
+                                "destinationContainerName": "scheduleddestination",
+                                "destinationBlobName": "@{variables('targetfolder')}/@{items('For_each')?['Name']}"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "AzureBlob-1",
+                                "operationId": "copyBlob",
+                                "serviceProviderId": "/serviceProviders/AzureBlob"
+                            }
+                        }
+                    },
+                    "Set_to_archive_tier": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "containerName": "scheduleddestination",
+                                "blobName": "@{variables('targetfolder')}/@{items('For_each')?['Name']}",
+                                "blobAccessTier": "Archive"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "AzureBlob-1",
+                                "operationId": "setBlobTier",
+                                "serviceProviderId": "/serviceProviders/AzureBlob"
+                            }
+                        },
+                        "runAfter": {
+                            "Copy_blob_from_source_location_to_destination": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "new_folder_name": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "new_folder_name": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "targetfolder",
+                            "type": "string",
+                            "value": "@concat('scheduled-', formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm:ss'))\r\n"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "List_all_the_blobs_using_path": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "Recurrence": {
+                "type": "Recurrence",
+                "recurrence": {
+                    "interval": 15,
+                    "frequency": "Minute"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}
