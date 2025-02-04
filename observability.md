@@ -10,10 +10,30 @@ Observability is the general term for this and it covers:
 ## Azure Portal observability
 By default, logic apps capture a *run history* that gives a view on all of the logic app runs. These runs are categorised into successful and unsuccessful - where there has been a failure on one or more steps. These can be clicked in the portal to see the cause and are a useful debugging aid. These are primarily useful in the development stages, but for later production use, it could be that the run history in the Azure Portal is not available to those who need to operationally manager or there may be simply too many logic app runs for this to be useful.
 
-
 ## Application Insights
+By default, when a Logic App Standard instance is created through the portal experience, an Application Insights instance is created per Logic App Standard. Note that this Logic App Standard can have a number of workflows, which is different to Logic App Consumption where there is only one workflow.
+
+In general, a Logic App will be one part of an integration and logs can therefore be created by other services. It is therefore recommended that all of the services used for a collections of integrations share the same Application Insights instance. This will allow Application Insights to correlate the requests across Azure services - thus creating a *map* of each of the overall integration processes. This will greatly benefit both debugging and the generation of later dashboard and alerts.
+
+Application Insights log all of its data into a series of tables and these can be queried using the Kusto query languages - sometimes referred to as KQL.
+
+It should be noted that Kusto is also used in many places in Azure as a query language for logs, but Application Insights will have its own set of log tables. The skills needed to write these queries are transferable elsewhere in Azure - but the actual queries are not themselves portable to other environments.
+
+Kusto query in App Insights on a logic app run
+```
+requests
+| where operation_Name startswith "blob-copier"
+```
+
 
 ## Log Analytics
+Log Analytics is a more infrastructure-focussed logging service, but it can be enabled for logic apps to inspect the runs.
+
+This differs from Application Insights in 2 areas:
+1. the tables and columns are different
+2. These queries can also make use of custom tracking properties that can be configured in the logic app workflows - so real workflow values can be queried and placed in a dashboard. So if an integration was between an e-commerce system and an invtorry system, the products names can  be tracked and potentially put in a dashboard e.g. a dashboard which lists the top ten popular products today.
+
+
 ```
 LogicAppWorkflowRuntime
 | where StartTime >= ago(24h)
