@@ -7,3 +7,34 @@ Observability is the general term for this and it covers:
 3. Dashboards for an at-a-glance view of the state of an integration
 4. Alerts - these can be generated if some threshold gets exceeded and should be limited to situations where someone needs to take some action - hence the phrase *actionable alerts*
 
+## Azure Portal observability
+By default, logic apps capture a *run history* that gives a view on all of the logic app runs. These runs are categorised into successful and unsuccessful - where there has been a failure on one or more steps. These can be clicked in the portal to see the cause and are a useful debugging aid. These are primarily useful in the development stages, but for later production use, it could be that the run history in the Azure Portal is not available to those who need to operationally manager or there may be simply too many logic app runs for this to be useful.
+
+
+## Application Insights
+
+## Log Analytics
+```
+LogicAppWorkflowRuntime
+| where StartTime >= ago(24h)
+| where WorkflowName == "blob-copier"
+| where Status == "Succeeded"  
+| order by StartTime desc
+| project ActionName, StartTime
+```
+{"Filename":"VisionMaster User Manual (English).pdf"}
+
+query with a custom tracking value *Filename*
+```
+LogicAppWorkflowRuntime
+| where StartTime >= ago(24h)
+| where WorkflowName == "blob-copier"
+| where Status == "Succeeded"
+| extend TrackedPropertiesParsed = parse_json(TrackedProperties)
+| project ActionName, StartTime, Filename = tostring(TrackedPropertiesParsed.Filename)
+| order by StartTime desc![image](https://github.com/user-attachments/assets/dc28a79a-3481-451f-acc8-1edc1448b049)
+```
+
+## Dashboard Creation
+
+## Alert Generation
