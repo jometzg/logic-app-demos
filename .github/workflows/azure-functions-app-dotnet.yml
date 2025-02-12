@@ -51,6 +51,7 @@ jobs:
         cp 'logicapps/connections.json' 'output/'
         cp -r 'workflows/copy-blob' 'output/'
         cp -r 'workflows/move-blobs' 'output/'
+        cp -r 'workflows/process-files' 'output/'
 
     - name: Easy Zip Files
       uses: papeloto/action-zip@v1
