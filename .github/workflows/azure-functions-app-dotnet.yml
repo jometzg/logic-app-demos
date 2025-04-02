@@ -49,6 +49,7 @@ jobs:
         mkdir output
         cp 'logicapps/host.json' 'output/'
         cp 'logicapps/connections.json' 'output/'
+        cp 'logicapps/parameters.json' 'output/'
         cp -r 'workflows/copy-blob' 'output/'
         cp -r 'workflows/move-blobs' 'output/'
         cp -r 'workflows/processs-files' 'output/'
